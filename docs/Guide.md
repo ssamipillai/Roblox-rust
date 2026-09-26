@@ -69,16 +69,6 @@ Next:
 
 # Phase 3
 
-- Ran command: `Copy-Item -Path "c:\Code\Roblox-rust\roblox-rust-starter\*" -Destination "c:\Code\Roblox-rust\" -Recurse -Force`
-- Created CombatManager.server.lua
-- Created LobbyManager.server.lua
-- Created PlayerStats.client.lua
-- Created RifleClient.client.lua
-- Created RifleHandler.server.lua
-- Edited GameManager.server.lua
-- Edited ResourceManager.server.lua
-- Edited implementation_plan.md
-
 **Phase 3: Survival & Combat** has been fully implemented!
 
 Similar to Phase 2, I first copied the contents of `roblox-rust-starter` to your root `Roblox-rust` directory to ensure all new scripts are in the main workspace, and then I proceeded with the implementation.
@@ -120,4 +110,26 @@ The `[implementation_plan.md](file:///c:/Users/ssami/.gemini/antigravity-ide/bra
 - sync this to Studio to playtest?
 - add loot bag pick up (resources & rifle) from players? (Part of phase 3)
 
+# Phase 4
 
+Ran command: `rojo serve default.project.json`
+Edited SurvivalManager.server.lua
+
+**Phase 4 (Inventory UI & Crafting)** and the **Loot Bag Pick-up Upgrade** have been implemented!
+
+1. **[InventoryUI.client.lua](file:///c:/Code/Roblox-rust/src/StarterGui/InventoryUI.client.lua)** *(Forge)*:
+   - Built a complete **Screen-space Inventory UI** from pure code, so it will spawn dynamically without you needing to build it visually in Studio.
+   - It features an **Inventory Grid** displaying live counts of Wood/Stone directly linked to Leaderstats.
+   - A **Crafting Menu** with a built-in "Craft Wall (20 Wood)" button that checks requirements client-side before pinging the server via `RequestCraftItem` to authorize the build.
+   - You can toggle the UI smoothly using the `E` or `I` keys.
+
+2. **[SurvivalManager.server.lua](file:///c:/Code/Roblox-rust/src/ServerScriptService/SurvivalManager.server.lua)** *(Sentinel Update for Phase 3)*:
+   - I intercepted the `handleDeath` logic. Now, when a player dies, it actively scans their `Backpack` and their `Character` for a `Rifle`.
+   - If they have a Rifle, it is stripped from them and injected into the Loot Bag data alongside their Wood.
+   - The Loot Bag `ProximityPrompt` text dynamically updates to say `"Loot Wood (X) & Rifle"`.
+   - When triggered, it transfers the Wood *and* automatically clones a new Rifle into the looter's Backpack.
+
+*Note: I attempted to automatically start the `rojo serve` background server for you so you could immediately sync and playtest this in Studio, but it looks like the `rojo` CLI utility is not installed on this machine's PATH. You may need to install Rojo locally (or use the VS Code extension) to sync these files!*
+
+### What's Next?
+Your `Guide.md` mentions **Phase 4: AI Companions (Booster)**, but our original roadmap listed **Phase 5: Procedural World Spawning (MapGenerator)**. Which direction would you like to take next?

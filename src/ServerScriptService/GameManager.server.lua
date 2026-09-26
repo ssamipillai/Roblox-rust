@@ -4,6 +4,7 @@ local Players = game:GetService("Players")
 
 local Events = ReplicatedStorage:WaitForChild("Events")
 local placeWallEvent = Events:WaitForChild("PlaceWallEvent")
+local requestCraftItem = Events:WaitForChild("RequestCraftItem")
 
 local WallDataStore = DataStoreService:GetDataStore("PlayerBaseWalls_V1")
 local MAX_PLACEMENT_DISTANCE = 50
@@ -61,6 +62,27 @@ placeWallEvent.OnServerEvent:Connect(function(player, targetPosition)
     -- Tag with owner info for saving later
     newWall:SetAttribute("OwnerId", player.UserId)
     newWall.Parent = PlacedObjects
+end)
+
+-- CRAFTING REQUEST LISTENER (Phase 4)
+requestCraftItem.OnServerEvent:Connect(function(player, itemName)
+    local leaderstats = player:FindFirstChild("leaderstats")
+    if not leaderstats then return end
+    
+    if itemName == "Wall" then
+        local wood = leaderstats:FindFirstChild("Wood")
+        if wood and wood.Value >= 20 then
+            -- We don't deduct wood here since the placement system currently deducts it upon actual placement.
+            -- Alternatively, if you want them to hold an item, we'd give them a tool here.
+            print(player.Name .. " clicked Craft Wall. They are authorized to build!")
+            -- You can optionally give a physical tool here:
+            -- local wallTool = Instance.new("Tool")
+            -- wallTool.Name = "Wall"
+            -- wallTool.Parent = player:FindFirstChild("Backpack")
+        else
+            warn(player.Name .. " attempted to craft a Wall without enough Wood.")
+        end
+    end
 end)
 
 -- 2. DATASTORE LOADING & LEADERSTATS SETUP

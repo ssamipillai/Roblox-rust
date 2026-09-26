@@ -60,13 +60,27 @@ local function handleDeath(player, character)
     
     humanoid.Died:Connect(function()
         local leaderstats = player:FindFirstChild("leaderstats")
-        if not leaderstats then return end
+        local woodAmount = 0
+        if leaderstats then
+            local woodStat = leaderstats:FindFirstChild("Wood")
+            if woodStat then
+                woodAmount = woodStat.Value
+                woodStat.Value = 0 -- Reset dead player's wood
+            end
+        end
         
-        local woodStat = leaderstats:FindFirstChild("Wood")
-        if not woodStat or woodStat.Value <= 0 then return end
+        -- Check for Rifle
+        local hasRifle = false
+        local backpack = player:FindFirstChild("Backpack")
+        if backpack and backpack:FindFirstChild("Rifle") then
+            hasRifle = true
+            backpack.Rifle:Destroy()
+        elseif character:FindFirstChild("Rifle") then
+            hasRifle = true
+            character.Rifle:Destroy()
+        end
         
-        local woodAmount = woodStat.Value
-        woodStat.Value = 0 -- Reset dead player's wood
+        if woodAmount <= 0 and not hasRifle then return end
         
         local rootPart = character:FindFirstChild("HumanoidRootPart")
         if not rootPart then return end
@@ -82,7 +96,11 @@ local function handleDeath(player, character)
         lootBag.CanCollide = true
         
         local prompt = Instance.new("ProximityPrompt")
-        prompt.ActionText = "Loot Wood (" .. woodAmount .. ")"
+        local promptText = "Loot Wood (" .. woodAmount .. ")"
+        if hasRifle then
+            promptText = promptText .. " & Rifle"
+        end
+        prompt.ActionText = promptText
         prompt.ObjectText = "Loot Bag"
         prompt.HoldDuration = 1
         prompt.MaxActivationDistance = 10
@@ -94,9 +112,28 @@ local function handleDeath(player, character)
                 local looterWood = looterStats:FindFirstChild("Wood")
                 if looterWood then
                     looterWood.Value = looterWood.Value + woodAmount
-                    lootBag:Destroy() -- Consume the bag
                 end
             end
+            
+            if hasRifle then
+                local looterBackpack = looter:FindFirstChild("Backpack")
+                if looterBackpack and not looterBackpack:FindFirstChild("Rifle") and not (looter.Character and looter.Character:FindFirstChild("Rifle")) then
+                    -- If we have a Rifle template in ReplicatedStorage, clone it. Otherwise, create a placeholder.
+                    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                    local templates = ReplicatedStorage:FindFirstChild("Templates")
+                    if templates and templates:FindFirstChild("Rifle") then
+                        templates.Rifle:Clone().Parent = looterBackpack
+                    else
+                        -- Fallback dummy tool
+                        local newRifle = Instance.new("Tool")
+                        newRifle.Name = "Rifle"
+                        newRifle.RequiresHandle = false
+                        newRifle.Parent = looterBackpack
+                    end
+                end
+            end
+            
+            lootBag:Destroy() -- Consume the bag
         end)
         
         lootBag.Parent = workspace
