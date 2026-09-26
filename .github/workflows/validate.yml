@@ -1,0 +1,16 @@
+name: Validate
+on:
+  push:
+  pull_request:
+jobs:
+  structure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate required project files
+        shell: bash
+        run: |
+          test -f default.project.json
+          test -f src/ServerScriptService/ServerBootstrap.server.lua
+          test -f docs/IMPLEMENTATION_PLAN.md
+          test -f docs/TEST_PLAN.md
