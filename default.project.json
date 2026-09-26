@@ -1,46 +1,22 @@
 {
-  "name": "RobloxRust",
+  "name": "Roblox Rust Starter",
   "tree": {
     "$className": "DataModel",
     "ReplicatedStorage": {
-      "$className": "ReplicatedStorage",
-      "Events": {
-        "$path": "src/ReplicatedStorage/Events"
-      },
-      "Shared": {
-        "$path": "src/ReplicatedStorage/Shared"
-      },
-      "Templates": {
-        "$path": "src/ReplicatedStorage/Templates"
-      }
+      "$path": "src/ReplicatedStorage"
     },
     "ServerScriptService": {
-      "$className": "ServerScriptService",
-      "Services": {
-        "$path": "src/ServerScriptService/Services"
-      },
-      "Tests": {
-        "$path": "src/ServerScriptService/Tests"
-      },
-      "ServerBootstrap.server.lua": "src/ServerScriptService/ServerBootstrap.server.lua"
-    },
-    "StarterPlayer": {
-      "$className": "StarterPlayer",
-      "StarterPlayerScripts": {
-        "$path": "src/StarterPlayer/StarterPlayerScripts"
-      }
+      "$path": "src/ServerScriptService"
     },
     "StarterGui": {
-      "$className": "StarterGui",
       "$path": "src/StarterGui"
     },
     "StarterPack": {
-      "$className": "StarterPack",
-      "Hatchet": {
-        "$path": "src/StarterPack/Hatchet"
-      },
-      "Rifle": {
-        "$path": "src/StarterPack/Rifle"
+      "$path": "src/StarterPack"
+    },
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        "$path": "src/StarterPlayer/StarterPlayerScripts"
       }
     }
   }

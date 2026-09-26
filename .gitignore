@@ -1,27 +1,6 @@
-# Roblox / Rojo
+/node_modules/
+/.vscode/
+/dist/
 *.rbxl
 *.rbxlx
-*.rbxl.lock
-*.rbxm
-*.rbxmx
-*.bak
-
-# Rojo build output
-build/
-*.place
-
-# Tooling
-node_modules/
-.vscode/
-.idea/
 .DS_Store
-Thumbs.db
-
-# Test / coverage
-coverage/
-logs/
-
-# Secrets / local config
-.env
-.env.*
-!.env.example
